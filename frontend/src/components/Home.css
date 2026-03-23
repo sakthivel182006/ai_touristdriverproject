@@ -1,0 +1,57 @@
+.home-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+  color: white;
+  border-radius: 10px;
+}
+
+.primary-btn,
+.secondary-btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background-color: #fff;
+  color: #0077ff;
+  font-weight: bold;
+}
+
+.secondary-btn {
+  background-color: #0077ff;
+  color: #fff;
+}
+
+.features {
+  margin-top: 50px;
+}
+
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.feature-card {
+  padding: 20px;
+  border-radius: 10px;
+  background: #f4f6f8;
+}
+
+.workflow ol {
+  margin-left: 20px;
+}
+
+.cta {
+  text-align: center;
+  margin-top: 50px;
+}
