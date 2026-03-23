@@ -29,8 +29,8 @@ const Authentication = ({ onLoginSuccess }) => {
     setLoading(true);
     
     const url = isLogin
-      ? "http://localhost:5000/api/users/login"
-      : "http://localhost:5000/api/users/register";
+      ? "https://ai-touristdriverprojectbackend.onrender.com/api/users/login"
+      : "https://ai-touristdriverprojectbackend.onrender.com/api/users/register";
 
     const body = isLogin
       ? {
