@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import "./Authentication.css";
 
 const Authentication = ({ onLoginSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -8,12 +9,25 @@ const Authentication = ({ onLoginSuccess }) => {
     email: "",
     password: ""
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async () => {
+    if (!form.email || !form.password) {
+      toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (!isLogin && !form.name) {
+      toast.error("Please enter your name");
+      return;
+    }
+
+    setLoading(true);
+    
     const url = isLogin
       ? "http://localhost:5000/api/users/login"
       : "http://localhost:5000/api/users/register";
@@ -40,77 +54,175 @@ const Authentication = ({ onLoginSuccess }) => {
 
       if (!res.ok) {
         toast.error(data.message || "Something went wrong");
+        setLoading(false);
         return;
       }
 
-      // 🔐 LOGIN FLOW
       if (isLogin) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-
-        toast.success("Login successful");
+        toast.success("Login successful! Welcome back! 🎉");
         onLoginSuccess();
-      }
-      // 📧 REGISTER FLOW (EMAIL VERIFICATION)
-      else {
-        toast.info(
-          "Verification email sent. Please check your inbox and verify."
+      } else {
+        toast.success(
+          "Registration successful! Verification email sent. Please check your inbox and verify your email."
         );
-
-        // switch to login screen
         setIsLogin(true);
         setForm({ name: "", email: "", password: "" });
       }
-
     } catch (err) {
-      toast.error("Server not reachable");
+      toast.error("Server not reachable. Please check your connection.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: "40px", textAlign: "center" }}>
-      <h2>{isLogin ? "Login" : "Register"}</h2>
+    <div className="auth-container">
+      <div className="auth-wrapper">
+        {/* Left Side - Brand Section */}
+        <div className="auth-brand">
+          <div className="brand-content">
+            <div className="brand-icon">✈️</div>
+            <h1>Trip Organizer</h1>
+            <p>Your intelligent travel companion powered by Agentic AI</p>
+            <div className="brand-features">
+              <div className="feature-item">
+                <span>🤖</span>
+                <span>AI-Powered Planning</span>
+              </div>
+              <div className="feature-item">
+                <span>⚡</span>
+                <span>Real-time Adaptation</span>
+              </div>
+              <div className="feature-item">
+                <span>💰</span>
+                <span>Budget Optimization</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      {!isLogin && (
-        <input
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-        />
-      )}
+        {/* Right Side - Form Section */}
+        <div className="auth-form-container">
+          <div className="auth-form-card">
+            <div className="form-header">
+              <h2>{isLogin ? "Welcome Back!" : "Create Account"}</h2>
+              <p>
+                {isLogin
+                  ? "Sign in to continue your journey"
+                  : "Join us and start planning your dream trips"}
+              </p>
+            </div>
 
-      <br />
+            <div className="auth-form">
+              {!isLogin && (
+                <div className="form-group">
+                  <label htmlFor="name">Full Name</label>
+                  <div className="input-icon">
+                    <span className="icon">👤</span>
+                    <input
+                      id="name"
+                      type="text"
+                      name="name"
+                      placeholder="Enter your full name"
+                      value={form.name}
+                      onChange={handleChange}
+                      disabled={loading}
+                    />
+                  </div>
+                </div>
+              )}
 
-      <input
-        name="email"
-        placeholder="Email"
-        value={form.email}
-        onChange={handleChange}
-      />
+              <div className="form-group">
+                <label htmlFor="email">Email Address</label>
+                <div className="input-icon">
+                  <span className="icon">📧</span>
+                  <input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="Enter your email"
+                    value={form.email}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
 
-      <br />
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <div className="input-icon">
+                  <span className="icon">🔒</span>
+                  <input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    value={form.password}
+                    onChange={handleChange}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
 
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={form.password}
-        onChange={handleChange}
-      />
+              {isLogin && (
+                <div className="forgot-password">
+                  <a href="#">Forgot Password?</a>
+                </div>
+              )}
 
-      <br />
+              <button
+                className="auth-submit-btn"
+                onClick={handleSubmit}
+                disabled={loading}
+              >
+                {loading ? (
+                  <>
+                    <span className="spinner"></span>
+                    {isLogin ? "Signing in..." : "Creating account..."}
+                  </>
+                ) : (
+                  <>{isLogin ? "Sign In" : "Create Account"}</>
+                )}
+              </button>
 
-      <button onClick={handleSubmit} style={{ marginTop: "10px" }}>
-        {isLogin ? "Login" : "Register"}
-      </button>
+              <div className="auth-divider">
+                <span>or</span>
+              </div>
 
-      <p
-        style={{ cursor: "pointer", marginTop: "10px", color: "blue" }}
-        onClick={() => setIsLogin(!isLogin)}
-      >
-        {isLogin ? "New user? Register" : "Already have an account? Login"}
-      </p>
+              <div className="social-login">
+                <button className="social-btn google">
+                  <span>G</span>
+                  Continue with Google
+                </button>
+                <button className="social-btn facebook">
+                  <span>f</span>
+                  Continue with Facebook
+                </button>
+              </div>
+
+              <div className="auth-switch">
+                <p>
+                  {isLogin
+                    ? "Don't have an account?"
+                    : "Already have an account?"}
+                  <button
+                    className="switch-btn"
+                    onClick={() => {
+                      setIsLogin(!isLogin);
+                      setForm({ name: "", email: "", password: "" });
+                    }}
+                    disabled={loading}
+                  >
+                    {isLogin ? "Sign Up" : "Sign In"}
+                  </button>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
