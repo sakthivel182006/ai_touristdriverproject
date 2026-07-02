@@ -26,7 +26,7 @@ const App = () => {
       }
 
       try {
-        const res = await authFetch("http://localhost:5000/api/auth/check");
+        const res = await authFetch("https://ai-touristdriverprojectbackend.onrender.com/api/auth/check");
         if (res.ok) setIsAuthenticated(true);
         else logout(true);
       } catch {

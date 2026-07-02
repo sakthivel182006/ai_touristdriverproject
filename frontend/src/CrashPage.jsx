@@ -5,7 +5,7 @@ const CrashPage = () => {
   const [values, setValues] = useState([]);
 
   const fetchValues = async () => {
-    const res = await axios.get("http://localhost:5000/api/crash/generate");
+    const res = await axios.get("https://ai-touristdriverprojectbackend.onrender.com/api/crash/generate");
     setValues(res.data);
   };
 

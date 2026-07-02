@@ -35,7 +35,7 @@ const Home = () => {
   const generatePlan = async () => {
     setLoading(true);
     try {
-      const res = await authFetch("http://localhost:5000/api/trip/create", {
+      const res = await authFetch("https://ai-touristdriverprojectbackend.onrender.com/api/trip/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -59,7 +59,7 @@ const Home = () => {
 
   // CONFIRM FINAL PLAN
   const confirmPlan = async () => {
-    await authFetch("http://localhost:5000/api/trip/confirm", {
+    await authFetch("https://ai-touristdriverprojectbackend.onrender.com/api/trip/confirm", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
